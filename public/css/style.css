@@ -1,0 +1,1399 @@
+/* Logistique - Custom Styles */
+
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #0dcaf0;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    
+    --border-radius: 0.375rem;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --box-shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Cards - Uniform style across all interfaces */
+.card {
+    border: none;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    box-shadow: var(--box-shadow-lg);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--dark-color);
+    padding: 1rem 1.5rem;
+}
+
+/* Stats Cards */
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: skewX(-15deg) translateX(100%);
+    transition: transform 0.6s;
+}
+
+.stat-card:hover::before {
+    transform: skewX(-15deg) translateX(-100%);
+}
+
+.stat-card.clients {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-card.commandes {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stat-card.vehicules {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.stat-card.trajets {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.stat-card.factures {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.stat-card.revenus {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    color: #333;
+}
+
+.stat-card.paiements {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+}
+
+.stat-card.salaires {
+    background: linear-gradient(135deg, #6f42c1 0%, #5a2d91 100%);
+}
+
+.stat-card.maintenances {
+    background: linear-gradient(135deg, #fd7e14 0%, #e55a00 100%);
+}
+
+.stat-card.autres {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+}
+
+.stat-card.depenses {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+.stat-card.benefice {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+}
+
+.stat-card.perte {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 0;
+}
+
+.stat-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    opacity: 0.3;
+}
+
+.page-header-icon {
+    position: absolute;
+    right: 2rem;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    opacity: 0.8;
+    z-index: 2;
+}
+
+/* Tables */
+.table {
+    background-color: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.table th {
+    background-color: var(--light-color);
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: var(--dark-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(var(--primary-color), 0.05);
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.status-en-attente {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-confirmee {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.status-en-cours {
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #99d6ff;
+}
+
+.status-livree, .status-termine {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-annulee, .status-annule {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-planifie {
+    background-color: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8db;
+}
+
+.status-brouillon {
+    background-color: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.status-envoyee {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-payee {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Buttons */
+.btn {
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-icon-right {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    gap: 0.5rem;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+    border: none;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
+    border: none;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    border: none;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #36d1dc 0%, #5b86e5 100%);
+    border: none;
+}
+
+/* Forms */
+.form-control, .form-select {
+    border-radius: var(--border-radius);
+    border: 1px solid #ced4da;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+/* Navbar */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: all 0.3s ease;
+    color:white;
+    padding:20px;
+    margin: 10px;
+}
+
+.nav-link:hover {
+    transform: translateY(-1px);
+    background-color: rgba(255, 255, 255, 0.466);
+    border-radius: var(--border-radius);
+}
+
+.nav-link.router-link-active {
+    background-color: rgb(255, 255, 255);
+    border-radius: var(--border-radius);
+    color:blue;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Logo Styles */
+.logo-image {
+    max-height: 80px;
+    width: auto;
+    margin-bottom: 1rem;
+}
+
+.header-logo-container {
+    margin-bottom: 1.5rem;
+}
+
+.header-logo {
+    max-height: 60px;
+    width: auto;
+}
+
+/* Login Page */
+.login-container {
+    min-height: 100vh;
+    background: url('../images/logisque.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+}
+
+.login-card {
+    max-width: 400px;
+    width: 100%;
+    margin: 2rem;
+    border-radius: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-logo {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+/* Client Tracking Section */
+.client-tracking-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid #dee2e6;
+    position: relative;
+    overflow: hidden;
+}
+
+.client-tracking-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 30%, rgba(13, 110, 253, 0.05) 50%, transparent 70%);
+    pointer-events: none;
+}
+
+.client-tracking-section h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.client-tracking-section .form-control {
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.client-tracking-section .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    transform: translateY(-1px);
+}
+
+.client-tracking-section .btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.client-tracking-section .btn-outline-primary:hover {
+    background: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.client-tracking-section .btn-outline-primary:disabled {
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Page Headers */
+.page-header {
+    position: relative;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 0.5rem;
+}
+
+.page-header-actions {
+    position: relative;
+    z-index: 2;
+    margin-top: 1rem;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    background: url('../images/entrepot.jpg') center/cover no-repeat;
+}
+
+/* Clients Interface Styles */
+.clients-header {
+    background: url('../images/clients.jpg') center/cover no-repeat;
+    position: relative;
+}
+.clients-header::after {
+    content: '\f007';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    @extend .page-header-icon;
+}
+
+/* Client Management Cards */
+.client-management-container {
+    padding: 2rem;
+}
+
+.client-management-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary-color);
+}
+
+.client-management-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.client-management-card .card-header {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.client-management-card .card-body {
+    padding: 1rem 0;
+}
+
+/* Standardize all page titles */
+.page-title {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Page header titles */
+.page-header h1 {
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Vehicles Header */
+.vehicles-header {
+    background: url('../images/vehicule.jpg') center/cover no-repeat;
+    position: relative;
+}
+.vehicles-header::after {
+    content: '\f0d1';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    @extend .page-header-icon;
+}
+
+/* Commands Header */
+.commands-header {
+    background: url('../images/stock.jpg') center/cover no-repeat;
+    position: relative;
+}
+.commands-header::after {
+    content: '\f46d';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    @extend .page-header-icon;
+}
+
+/* Factures Header */
+.factures-header {
+    background: url('../images/facture.jpg') center/cover no-repeat;
+    position: relative;
+}
+.factures-header::after {
+    content: '\f571';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    @extend .page-header-icon;
+}
+
+/* Trajets Header */
+.trajets-header {
+    background: url('../images/road.jpg') center/cover no-repeat;
+    position: relative;
+}
+.trajets-header::after {
+    content: '\f018';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    @extend .page-header-icon;
+}
+
+/* Transactions Header */
+.transactions-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+}
+.transactions-header::after {
+    content: '\f362';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    @extend .page-header-icon;
+}
+
+/* Planification Header */
+.planification-header {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    position: relative;
+}
+.planification-header::after {
+    content: '\f073';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    @extend .page-header-icon;
+}
+
+/* Users Header */
+.users-header {
+    background: url('../images/utilisateur.jpg') center/cover no-repeat;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.users-header:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.users-header h1 {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    font-weight: 600;
+}
+
+.users-header p {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Dashboard Charts */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.chart-small {
+    height: 200px;
+}
+
+/* Responsive Tables */
+.table-responsive {
+    border-radius: var(--border-radius);
+}
+
+@media (max-width: 768px) {
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .table {
+        font-size: 0.875rem;
+    }
+    
+    .btn {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Modal Improvements */
+.modal-content {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+    background-color: var(--light-color);
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    background-color: var(--light-color);
+}
+
+/* Alerts */
+.alert {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+/* Progress Bars */
+.progress {
+    border-radius: 50px;
+    height: 0.75rem;
+}
+
+.progress-bar {
+    border-radius: 50px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb-item {
+    font-weight: 500;
+}
+
+.breadcrumb-item.active {
+    color: var(--primary-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .action-buttons,
+    .btn,
+    .alert {
+        display: none !important;
+    }
+    
+    .container-fluid {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Utilities */
+.text-muted {
+    color: #6c757d !important;
+}
+
+.font-weight-bold {
+    font-weight: 700 !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.border-start {
+    border-left: 4px solid var(--primary-color) !important;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%) !important;
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%) !important;
+}
+
+/* Custom rounded corners */
+/* Header Styles */
+header,
+.navbar.rounded-bottom {
+    border-bottom-left-radius: 25px !important;
+    border-bottom-right-radius: 25px !important;
+}
+
+/* Footer Styles */
+footer,
+footer.rounded-top {
+    border-top-left-radius: 30px !important;
+    border-top-right-radius: 30px !important;
+}
+
+/* Transactions and Planification Modals */
+.nav-tabs .nav-link {
+    border-radius: 0.375rem 0.375rem 0 0;
+    margin-right: 0.25rem;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+/* Styles spécifiques pour les onglets dans les modales Transactions et Planification de la page Factures (Admin uniquement) */
+#transactionsModal .nav-tabs .nav-link,
+#planificationModal .nav-tabs .nav-link {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+#transactionsModal .nav-tabs .nav-link:hover,
+#planificationModal .nav-tabs .nav-link:hover {
+    background-color: #333;
+    color: white;
+    border-color: #333;
+}
+
+#transactionsModal .nav-tabs .nav-link.active,
+#planificationModal .nav-tabs .nav-link.active {
+    background-color: black;
+    border-color: black;
+    color: white;
+}
+
+/* Nouvelles cartes de statistiques financières */
+.stat-card.depenses {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+}
+
+.stat-card.depenses .stat-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.stat-card.salaires {
+    background: linear-gradient(135deg, #6f42c1, #5a32a3);
+    color: white;
+}
+
+.stat-card.salaires .stat-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Amélioration des cartes existantes */
+.stat-card.revenus {
+    background: linear-gradient(135deg, #198754, #146c43);
+    color: white;
+}
+
+.stat-card.revenus .stat-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Styles pour les graphiques financiers */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.chart-small {
+    height: 250px;
+}
+
+/* Boutons de période pour le graphique des revenus */
+.btn-group .btn.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+/* Animation pour les nouvelles cartes */
+.stat-card.depenses:hover,
+.stat-card.salaires:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive pour les nouvelles cartes */
+@media (max-width: 768px) {
+    .stat-card.depenses,
+    .stat-card.salaires {
+        margin-bottom: 1rem;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+    .chart-small {
+        height: 200px;
+    }
+}
+
+/* Styles pour la carte GPS des trajets */
+#trajetsMap {
+    border-radius: 0 0 0.375rem 0.375rem;
+    z-index: 1;
+}
+
+/* Styles pour les marqueurs personnalisés */
+.custom-map-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Styles pour les popups de la carte */
+.map-popup {
+    min-width: 250px;
+    font-size: 14px;
+}
+
+.map-popup h6 {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: 600;
+}
+
+.map-popup p {
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.map-popup .btn {
+    font-size: 12px;
+    padding: 4px 8px;
+}
+
+/* Styles pour les boutons de vue de carte */
+.btn-group .btn.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+/* Animation pour les marqueurs */
+.custom-map-marker div {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Styles pour les itinéraires */
+.leaflet-routing-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Responsive pour la carte */
+@media (max-width: 768px) {
+    #trajetsMap {
+        height: 350px !important;
+    }
+
+    .map-popup {
+        min-width: 200px;
+        font-size: 12px;
+    }
+
+    .map-popup h6 {
+        font-size: 14px;
+    }
+}
+
+/* Styles pour les badges de statut dans les popups */
+.map-popup .status-badge {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+/* Amélioration de l'affichage des contrôles de carte */
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+}
+
+.leaflet-control-zoom a {
+    background-color: white !important;
+    border: 1px solid #ddd !important;
+    color: #333 !important;
+    font-weight: bold !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.tab-content {
+    border: 1px solid #dee2e6;
+    border-top: none;
+    border-radius: 0 0 0.375rem 0.375rem;
+    padding: 1rem;
+    background-color: white;
+}
+
+.table-sm th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Budget Cards */
+.card-body .d-flex {
+    margin-bottom: 0.5rem;
+}
+
+.card-body .d-flex:last-child {
+    margin-bottom: 0;
+}
+
+/* Transaction Type Colors */
+.text-success {
+    color: #198754 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Modal Improvements for Large Content */
+.modal-xl .modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Responsive Tables in Modals */
+@media (max-width: 768px) {
+    .modal-xl {
+        max-width: 95%;
+    }
+
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+
+    .nav-tabs .nav-link {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* Statistics Cards */
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+.text-xs {
+    font-size: 0.7rem;
+}
+
+.font-weight-bold {
+    font-weight: 700 !important;
+}
+
+.text-gray-800 {
+    color: #5a5c69 !important;
+}
+
+.text-gray-300 {
+    color: #dddfeb !important;
+}
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.no-gutters > .col,
+.no-gutters > [class*="col-"] {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+/* Icon Circle for Top Clients */
+.icon-circle {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.875rem;
+}
+
+/* Statistics Cards Hover Effects */
+.card.shadow:hover {
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Progress Bar Styling */
+.progress {
+    background-color: #f8f9fc;
+}
+
+/* Card Header Styling */
+.card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+/* Statistics Text Colors */
+.text-primary {
+    color: #4e73df !important;
+}
+
+.text-success {
+    color: #1cc88a !important;
+}
+
+.text-info {
+    color: #36b9cc !important;
+}
+
+.text-warning {
+    color: #f6c23e !important;
+}
+
+/* Responsive Statistics Cards */
+@media (max-width: 768px) {
+    .col-xl-3 {
+        margin-bottom: 1rem;
+    }
+
+    .h5 {
+        font-size: 1.1rem;
+    }
+
+    .fa-2x {
+        font-size: 1.5em;
+    }
+
+    .icon-circle {
+        height: 2rem;
+        width: 2rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* ========================================
+   STYLES SPÉCIFIQUES POUR LES ONGLETS
+   Pages Transactions et Planification & Budget
+   ======================================== */
+
+/* Titres des onglets en noir avec fond blanc pour administrateur */
+#transactionsTabs .nav-link,
+#planificationTabs .nav-link {
+    color: #000000 !important;
+    font-weight: 600;
+    border: 1px solid #dee2e6;
+    border-bottom: none;
+    background-color: #ffffff !important; /* Fond blanc pour administrateur */
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre pour distinction */
+}
+
+#transactionsTabs .nav-link:hover,
+#planificationTabs .nav-link:hover {
+    color: #000000 !important;
+    background-color: #f8f9fa !important; /* Fond très légèrement gris au hover */
+    border-color: #dee2e6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée au hover */
+}
+
+#transactionsTabs .nav-link.active,
+#planificationTabs .nav-link.active {
+    color: #000000 !important;
+    background-color: #ffffff !important; /* Fond blanc pour onglet actif */
+    border-color: #dee2e6 #dee2e6 #ffffff;
+    font-weight: 700;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Ombre vers le haut pour l'onglet actif */
+}
+
+/* Titres des sections dans les onglets */
+#paiements h6,
+#salaires h6,
+#maintenances h6,
+#carburant h6,
+#autres-depenses h6,
+#projets h6,
+#achats h6,
+#voyages h6 {
+    color: #000000 !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Titres des cartes de budget */
+.card-header h6 {
+    color: #000000 !important;
+    font-weight: 600;
+}
+
+/* Titre principal du résultat prévisionnel */
+#budget h5 {
+    color: #000000 !important;
+    font-weight: 700;
+}
+
+/* S'assurer que les icônes dans les onglets restent visibles */
+#transactionsTabs .nav-link i,
+#planificationTabs .nav-link i {
+    color: #000000 !important;
+}
+
+/* Améliorer la lisibilité des onglets */
+.nav-tabs {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.nav-tabs .nav-link {
+    margin-bottom: -2px;
+    border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.nav-tabs .nav-link.active {
+    border-bottom-color: #ffffff;
+}
+
+/* Styles spécifiques pour les boutons dans les onglets (administrateur) */
+#transactionsTabs .nav-link,
+#planificationTabs .nav-link {
+    /* Amélioration de l'apparence des boutons d'onglets */
+    border-radius: 0.5rem 0.5rem 0 0 !important; /* Coins arrondis en haut */
+    margin-right: 0.25rem; /* Espacement entre les onglets */
+    padding: 0.75rem 1.25rem; /* Padding généreux */
+    font-size: 0.95rem; /* Taille de police légèrement plus grande */
+}
+
+/* Conteneur des onglets avec fond blanc */
+.nav-tabs {
+    background-color: #ffffff;
+    border-bottom: 2px solid #dee2e6;
+    padding: 0.5rem 0.5rem 0 0.5rem; /* Padding autour des onglets */
+    border-radius: 0.5rem 0.5rem 0 0; /* Coins arrondis en haut */
+}
+
+/* Contenu des onglets avec fond blanc */
+.tab-content {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    border-radius: 0 0 0.5rem 0.5rem; /* Coins arrondis en bas */
+    padding: 1.5rem;
+}
+
+/* S'assurer que les cartes dans les onglets ont un fond blanc */
+.tab-pane .card {
+    background-color: #ffffff !important;
+    border: 1px solid #e3e6f0;
+}
+
+/* Boutons d'action dans les onglets */
+.tab-pane .btn {
+    background-color: #ffffff;
+    border: 2px solid #dee2e6;
+    color: #000000;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.tab-pane .btn:hover {
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tab-pane .btn-success {
+    background-color: #ffffff;
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.tab-pane .btn-success:hover {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+.tab-pane .btn-danger {
+    background-color: #ffffff;
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.tab-pane .btn-danger:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.tab-pane .btn-warning {
+    background-color: #ffffff;
+    border-color: #ffc107;
+    color: #856404;
+}
+
+.tab-pane .btn-warning:hover {
+    background-color: #ffc107;
+    color: #212529;
+}

@@ -1,0 +1,306 @@
+# Mini-ERP Logistique - Apache Configuration
+# Optimized for production use with security hardening
+
+# Enable RewriteEngine
+RewriteEngine On
+
+# Security Headers
+<IfModule mod_headers.c>
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options nosniff
+    
+    # Enable XSS Protection
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Prevent clickjacking
+    Header always set X-Frame-Options DENY
+    
+    # Strict Transport Security (if using HTTPS)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    
+    # Content Security Policy
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' cdn.jsdelivr.net unpkg.com cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' cdnjs.cloudflare.com; connect-src 'self'"
+    
+    # Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Remove server information
+    Header unset Server
+    Header unset X-Powered-By
+</IfModule>
+
+# Hide sensitive files and directories
+<FilesMatch "\.(env|ini|log|sh|sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Protect configuration files
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Protect database files
+<Files "database.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Block access to vendor directory (if using Composer)
+RedirectMatch 403 ^/vendor/.*$
+
+# Block access to git files
+RedirectMatch 403 ^/\.git.*$
+
+# Block access to database directory from web
+<Directory "database">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+# Block access to private directories
+<Directory "utils">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+<Directory "middleware">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+<Directory "models">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+<Directory "controllers">
+    Order Allow,Deny
+    Deny from all
+</Directory>
+
+# Allow access to public directory
+<Directory "public">
+    Order Allow,Deny
+    Allow from all
+</Directory>
+
+# API Routes - Redirect all API calls to index.php
+RewriteRule ^api/(.*)$ index.php [QSA,L]
+
+# Frontend Routes - Serve Vue.js application
+# Redirect all requests to public/index.html except for existing files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/index.html [QSA,L]
+
+# Handle direct access to public files
+RewriteCond %{REQUEST_URI} ^/public/(.*)$
+RewriteCond %{DOCUMENT_ROOT}/public/%1 -f
+RewriteRule ^public/(.*)$ public/$1 [L]
+
+# Redirect root to public directory
+RewriteRule ^$ public/index.html [L]
+
+# PHP Configuration
+<IfModule mod_php7.c>
+    # Hide PHP version
+    php_flag expose_php Off
+    
+    # Security settings
+    php_flag register_globals Off
+    php_flag magic_quotes_gpc Off
+    php_flag allow_url_fopen Off
+    php_flag allow_url_include Off
+    
+    # Upload settings
+    php_value upload_max_filesize 5M
+    php_value post_max_size 5M
+    php_value max_execution_time 30
+    php_value max_input_time 30
+    php_value memory_limit 128M
+    
+    # Session security
+    php_flag session.cookie_httponly On
+    php_flag session.cookie_secure On
+    php_flag session.use_strict_mode On
+    php_value session.cookie_samesite Strict
+    
+    # Error reporting (adjust for production)
+    php_flag display_errors Off
+    php_flag log_errors On
+    php_value error_log logs/php_errors.log
+</IfModule>
+
+# Compression
+<IfModule mod_deflate.c>
+    # Compress HTML, CSS, JavaScript, Text, XML and fonts
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE application/x-font
+    AddOutputFilterByType DEFLATE application/x-font-opentype
+    AddOutputFilterByType DEFLATE application/x-font-otf
+    AddOutputFilterByType DEFLATE application/x-font-truetype
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE image/x-icon
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+    
+    # Remove browser bugs (only needed for really old browsers)
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+    Header append Vary User-Agent
+</IfModule>
+
+# Browser Caching
+<IfModule mod_expires.c>
+    ExpiresActive on
+    
+    # Images
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # CSS and JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    
+    # Fonts
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    
+    # HTML and XML
+    ExpiresByType text/html "access plus 1 hour"
+    ExpiresByType application/xml "access plus 1 hour"
+    ExpiresByType text/xml "access plus 1 hour"
+    
+    # JSON and API responses
+    ExpiresByType application/json "access plus 0 seconds"
+    
+    # Default
+    ExpiresDefault "access plus 1 week"
+</IfModule>
+
+# ETag removal for better caching
+<IfModule mod_headers.c>
+    Header unset ETag
+</IfModule>
+FileETag None
+
+# Rate Limiting (basic protection)
+<IfModule mod_evasive24.c>
+    DOSHashTableSize    2048
+    DOSPageCount        20
+    DOSSiteCount        50
+    DOSPageInterval     1
+    DOSSiteInterval     1
+    DOSBlockingPeriod   10
+</IfModule>
+
+# Custom Error Pages
+ErrorDocument 400 /public/errors/400.html
+ErrorDocument 401 /public/errors/401.html
+ErrorDocument 403 /public/errors/403.html
+ErrorDocument 404 /public/errors/404.html
+ErrorDocument 500 /public/errors/500.html
+
+# Force HTTPS (uncomment in production with SSL)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Disable server signature
+ServerSignature Off
+
+# Disable ETags for static files
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|otf)$">
+    FileETag None
+    <IfModule mod_headers.c>
+        Header unset ETag
+        Header set Cache-Control "max-age=31536000, public, immutable"
+    </IfModule>
+</FilesMatch>
+
+# Security for PHP files
+<FilesMatch "\.php$">
+    <IfModule mod_headers.c>
+        Header always set X-Content-Type-Options nosniff
+        Header always set X-Frame-Options DENY
+    </IfModule>
+</FilesMatch>
+
+# Prevent access to backup files
+<FilesMatch "\.(bak|backup|old|tmp|temp)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block common exploit attempts
+<IfModule mod_alias.c>
+    RedirectMatch 403 (?i)/wp-admin
+    RedirectMatch 403 (?i)/wp-login
+    RedirectMatch 403 (?i)/wp-content
+    RedirectMatch 403 (?i)/wp-includes
+    RedirectMatch 403 (?i)/xmlrpc.php
+    RedirectMatch 403 (?i)/admin
+    RedirectMatch 403 (?i)/phpmyadmin
+    RedirectMatch 403 (?i)/sql
+</IfModule>
+
+# Block suspicious request methods
+<LimitExcept GET POST PUT DELETE OPTIONS>
+    Order Allow,Deny
+    Deny from all
+</LimitExcept>
+
+# Block requests with suspicious query strings
+<IfModule mod_rewrite.c>
+    RewriteCond %{QUERY_STRING} (<|%3C).*script.*(>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+    RewriteCond %{QUERY_STRING} ^.*(\[|\]|\(|\)|<|>|ê|"|;|\?|\*|=$).* [NC,OR]
+    RewriteCond %{QUERY_STRING} ^.*(\\x00|\\x04|\\x08|\\x0d|\\x1b|\\x20|\\x3c|\\x3e|\\x7f).* [NC]
+    RewriteRule ^(.*)$ - [F,L]
+</IfModule>
+
+# Log security events
+<IfModule mod_log_config.c>
+    LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    CustomLog logs/access.log combined
+    
+    # Log blocked requests
+    LogFormat "%h %l %u %t \"%r\" %>s %O \"BLOCKED\"" blocked
+    SetEnvIf Request_URI "wp-admin|wp-login|phpmyadmin" blocked_request
+    CustomLog logs/blocked.log blocked env=blocked_request
+</IfModule>
+
+# Additional MIME types
+<IfModule mod_mime.c>
+    AddType application/font-woff .woff
+    AddType application/font-woff2 .woff2
+    AddType application/vnd.ms-fontobject .eot
+    AddType application/x-font-ttf .ttf
+    AddType image/svg+xml .svg
+</IfModule>

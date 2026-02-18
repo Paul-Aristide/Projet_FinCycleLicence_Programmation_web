@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi de Colis - LogiswayZ</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin=""/>
+    
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #0dcaf0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-radius: 0.375rem;
+            --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            --box-shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #212529;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .tracking-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin: 2rem auto;
+            max-width: 1200px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .shipment-card {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .shipment-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .status-created { background-color: #ffc107; color: #000; }
+        .status-validated { background-color: #17a2b8; color: white; }
+        .status-planned { background-color: #6f42c1; color: white; }
+        .status-in_transit { background-color: #fd7e14; color: white; }
+        .status-delivered { background-color: #28a745; color: white; }
+        .status-rejected { background-color: #dc3545; color: white; }
+        .status-cancelled { background-color: #6c757d; color: white; }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #dee2e6;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -0.75rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #dee2e6;
+        }
+        
+        .map-container {
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .client-info {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-logout {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tracking-container {
+                margin: 1rem;
+                border-radius: 10px;
+            }
+            
+            .map-container {
+                height: 300px;
+            }
+        }
+
+        /* Mise en évidence de la commande focalisée */
+        .highlight-commande {
+            animation: highlightPulse 2s ease-in-out;
+            border: 3px solid #007bff !important;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.5) !important;
+        }
+
+        @keyframes highlightPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+            }
+        }
+
+        .shipment-card.highlight-commande .card-header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+        }
+
+        .shipment-card.highlight-commande .status-badge {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Écran de connexion -->
+        <div v-if="!isLoggedIn" class="login-container">
+            <div class="login-card">
+                <div class="text-center mb-4">
+                    <i class="fas fa-truck fa-3x text-primary mb-3"></i>
+                    <h2>LogiswayZ</h2>
+                    <p class="text-muted">Suivi de vos colis en temps réel</p>
+                </div>
+                
+                <form @submit.prevent="login">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope me-2"></i>Email du client
+                        </label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="email" 
+                            v-model="loginForm.email"
+                            placeholder="Entrez votre email client"
+                            required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100" :disabled="loading">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        <span v-if="loading">Connexion...</span>
+                        <span v-else>Se connecter</span>
+                    </button>
+                </form>
+                
+                <div v-if="error" class="alert alert-danger mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {{ error }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Interface de suivi -->
+        <div v-if="isLoggedIn" class="tracking-container">
+            <div class="header position-relative">
+                <h1><i class="fas fa-truck me-2"></i>LogiswayZ - Suivi de Colis</h1>
+                <p class="mb-0">Bienvenue {{ client.prenom }} {{ client.nom }}</p>
+                <button @click="logout" class="btn btn-outline-light btn-sm btn-logout">
+                    <i class="fas fa-sign-out-alt me-1"></i>Déconnexion
+                </button>
+            </div>
+            
+            <div class="p-4">
+                <!-- Informations client -->
+                <div class="client-info">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-user me-2"></i>Informations Client</h5>
+                            <p class="mb-1"><strong>ID:</strong> {{ client.id }}</p>
+                            <p class="mb-1"><strong>Nom:</strong> {{ client.nom }} {{ client.prenom }}</p>
+                            <p class="mb-0"><strong>Email:</strong> {{ client.email }}</p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <h5><i class="fas fa-chart-bar me-2"></i>Statistiques</h5>
+                            <p class="mb-1"><strong>Total commandes:</strong> {{ shipments.length }}</p>
+                            <p class="mb-1"><strong>En cours:</strong> {{ getShipmentsByStatus('in_transit').length }}</p>
+                            <p class="mb-0"><strong>Livrées:</strong> {{ getShipmentsByStatus('delivered').length }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Liste des colis -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h3><i class="fas fa-boxes me-2"></i>Mes Colis</h3>
+                        
+                        <div v-if="loading" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Chargement...</span>
+                            </div>
+                        </div>
+                        
+                        <div v-else-if="shipments.length === 0" class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Aucun colis trouvé</p>
+                        </div>
+                        
+                        <div v-else>
+                            <div v-for="shipment in shipments"
+                                 :key="shipment.commande.id"
+                                 :data-commande-id="shipment.commande.id"
+                                 class="shipment-card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-box me-2"></i>
+                                        {{ shipment.commande.numero_commande }}
+                                    </h6>
+                                    <span :class="'status-badge status-' + shipment.commande.workflow_state">
+                                        {{ getStatusLabel(shipment.commande.workflow_state) }}
+                                    </span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <p class="mb-1">
+                                                <i class="fas fa-map-marker-alt text-success me-2"></i>
+                                                <strong>Départ:</strong> {{ shipment.commande.adresse_depart }}
+                                            </p>
+                                            <p class="mb-1">
+                                                <i class="fas fa-flag-checkered text-danger me-2"></i>
+                                                <strong>Arrivée:</strong> {{ shipment.commande.adresse_arrivee }}
+                                            </p>
+                                            <p class="mb-1">
+                                                <i class="fas fa-calendar me-2"></i>
+                                                <strong>Date prévue:</strong> {{ formatDate(shipment.commande.date_prevue) }}
+                                            </p>
+                                            <p class="mb-0" v-if="shipment.commande.poids_kg">
+                                                <i class="fas fa-weight me-2"></i>
+                                                <strong>Poids:</strong> {{ shipment.commande.poids_kg }} kg
+                                            </p>
+                                        </div>
+                                        <div class="col-md-4 text-md-end">
+                                            <button @click="viewDetails(shipment.commande.id)" 
+                                                    class="btn btn-primary btn-sm">
+                                                <i class="fas fa-eye me-1"></i>Détails
+                                            </button>
+                                            <button v-if="shipment.trajets.length > 0" 
+                                                    @click="showOnMap(shipment)" 
+                                                    class="btn btn-success btn-sm ms-2">
+                                                <i class="fas fa-map me-1"></i>Carte
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Détails et carte -->
+                    <div class="col-lg-4">
+                        <div v-if="selectedShipment">
+                            <h4><i class="fas fa-info-circle me-2"></i>Détails</h4>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>{{ selectedShipment.commande.numero_commande }}</h6>
+                                    
+                                    <!-- Timeline -->
+                                    <div class="timeline mt-3">
+                                        <div v-for="event in selectedShipment.timeline" 
+                                             :key="event.date" 
+                                             class="timeline-item">
+                                            <div class="timeline-content">
+                                                <h6 class="mb-1">{{ event.state_label }}</h6>
+                                                <small class="text-muted">{{ formatDateTime(event.date) }}</small>
+                                                <p v-if="event.reason" class="mb-0 mt-1">{{ event.reason }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Carte -->
+                        <div class="mt-4">
+                            <h4><i class="fas fa-map me-2"></i>Localisation</h4>
+                            <div id="trackingMap" class="map-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+            crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+        
+        createApp({
+            data() {
+                return {
+                    isLoggedIn: false,
+                    client: {},
+                    shipments: [],
+                    selectedShipment: null,
+                    loading: false,
+                    error: '',
+                    loginForm: {
+                        email: ''
+                    },
+                    map: null,
+                    focusCommandeId: null
+                }
+            },
+            
+            mounted() {
+                // Récupérer le paramètre focus de l'URL
+                const urlParams = new URLSearchParams(window.location.search);
+                this.focusCommandeId = urlParams.get('focus');
+
+                this.checkAuth();
+                this.initMap();
+            },
+            
+            methods: {
+                async checkAuth() {
+                    try {
+                        const response = await axios.get('/api/client/info');
+                        this.client = response.data.data.client;
+                        this.isLoggedIn = true;
+                        this.loadShipments();
+                    } catch (error) {
+                        this.isLoggedIn = false;
+                    }
+                },
+                
+                async login() {
+                    this.loading = true;
+                    this.error = '';
+                    
+                    try {
+                        const response = await axios.post('/api/client/login', {
+                            email: this.loginForm.email
+                        });
+                        this.client = response.data.data.client;
+                        this.isLoggedIn = true;
+                        this.loadShipments();
+                    } catch (error) {
+                        this.error = error.response?.data?.message || 'Erreur de connexion';
+                        this.loginForm.email = '';
+                    }
+                    
+                    this.loading = false;
+                },
+                
+                async logout() {
+                    try {
+                        await axios.post('/api/client/logout');
+                        this.isLoggedIn = false;
+                        this.client = {};
+                        this.shipments = [];
+                        this.selectedShipment = null;
+                        this.loginForm.email = '';
+                    } catch (error) {
+                        console.error('Erreur de déconnexion:', error);
+                    }
+                },
+                
+                async loadShipments() {
+                    this.loading = true;
+                    try {
+                        const response = await axios.get('/api/client/shipments');
+                        this.shipments = response.data.data;
+
+                        // Si une commande spécifique doit être mise en focus
+                        if (this.focusCommandeId) {
+                            const focusShipment = this.shipments.find(s => s.commande.id == this.focusCommandeId);
+                            if (focusShipment) {
+                                // Ouvrir automatiquement les détails de cette commande
+                                this.viewDetails(this.focusCommandeId);
+
+                                // Faire défiler vers cette commande après un court délai
+                                this.$nextTick(() => {
+                                    setTimeout(() => {
+                                        const element = document.querySelector(`[data-commande-id="${this.focusCommandeId}"]`);
+                                        if (element) {
+                                            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                            element.classList.add('highlight-commande');
+                                        }
+                                    }, 500);
+                                });
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Erreur de chargement:', error);
+                    }
+                    this.loading = false;
+                },
+                
+                async viewDetails(commandeId) {
+                    try {
+                        const response = await axios.get(`/api/client/shipments/${commandeId}`);
+                        this.selectedShipment = response.data.data;
+                    } catch (error) {
+                        console.error('Erreur de chargement des détails:', error);
+                    }
+                },
+                
+                showOnMap(shipment) {
+                    // Afficher le trajet sur la carte
+                    if (this.map && shipment.trajets.length > 0) {
+                        // Logique d'affichage sur carte (à implémenter)
+                        console.log('Affichage sur carte:', shipment);
+                    }
+                },
+                
+                initMap() {
+                    this.$nextTick(() => {
+                        this.map = L.map('trackingMap').setView([7.539989, -5.54708], 7);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '© OpenStreetMap contributors'
+                        }).addTo(this.map);
+                    });
+                },
+                
+                getShipmentsByStatus(status) {
+                    return this.shipments.filter(s => s.commande.workflow_state === status);
+                },
+                
+                getStatusLabel(status) {
+                    const labels = {
+                        'created': 'Créée',
+                        'validated': 'Validée',
+                        'rejected': 'Refusée',
+                        'planned': 'Planifiée',
+                        'in_transit': 'En cours',
+                        'delivered': 'Livrée',
+                        'cancelled': 'Annulée'
+                    };
+                    return labels[status] || status;
+                },
+                
+                formatDate(date) {
+                    return new Date(date).toLocaleDateString('fr-FR');
+                },
+                
+                formatDateTime(date) {
+                    return new Date(date).toLocaleString('fr-FR');
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

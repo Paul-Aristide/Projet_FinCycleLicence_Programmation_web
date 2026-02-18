@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title> LogisWayZ - Changement</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    body {
+      width: 100vw;
+      height: 100vh;
+      flex-direction: column;
+      position: relative;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: url('images/logisque.jpg') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(2px);
+    z-index: -1;
+}
+
+
+
+    /* ---- Network Animation ---- */
+    .bg-anim {
+      position: absolute;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, rgba(10,20,30,0.2) 0%, rgba(5,10,15,0.3) 100%);
+    }
+    .network-line {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, currentColor, transparent);
+      animation: networkMove 4s linear infinite;
+      opacity: 0.7;
+      filter: drop-shadow(0 0 4px currentColor);
+    }
+    @keyframes networkMove {
+      0% { transform: translateX(-100%); opacity: 0; }
+      5% { opacity: 0.7; }
+      95% { opacity: 0.7; }
+      100% { transform: translateX(100vw); opacity: 0; }
+    }
+    .network-node {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 6px 2px white;
+      animation: pulse 2s infinite alternate;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(1.3); opacity: 1; }
+    }
+    @keyframes waveMove {
+      0% { transform: translateX(0) scaleY(1);}
+      50% { transform: translateX(-25vw) scaleY(1.07);}
+      100% { transform: translateX(-50vw) scaleY(1);}
+    }
+    /* ---- Logo arrondi ---- */
+    .logo-container {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .logo-img {
+      width: 190px;
+      height: 190px;
+      border: 7px double blue;
+      border-radius: 100%;
+      box-shadow: 0 8px 40px 0 #2c7a7b22, 0 2px 8px #2b6cb022;
+      background: #fff;
+      padding: 20px;
+      object-fit: contain;
+      transition: box-shadow 0.4s;
+    }
+    .logo-img:hover {
+      box-shadow: 0 12px 60px 0 #2c7a7b33, 0 2px 12px #2b6cb044;
+    }
+    .logo-name {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 2px;
+      margin-top: 18px;
+      text-align: center;
+      text-shadow: 0 2px 12px rgba(44,62,80,0.07);
+      user-select: none;
+    }
+    .loader {
+      border: 7px solid #e0e6ed;
+      border-top: 7px solid #2c7a7b;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1.1s linear infinite;
+      margin: 40px auto 0 auto;
+      box-shadow: 0 2px 12px rgba(44,62,80,0.08);
+      z-index: 2;
+      position: relative;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+    .message {
+      font-size: 2.1rem;
+      font-weight: 600;
+      color: #ffffff !important;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.7);
+    }
+  </style>
+</head>
+<body>
+  <!-- Network animation -->
+  <div class="bg-anim" id="networkAnim"></div>
+
+  <!-- Logo et contenu -->
+  <div class="logo-container">
+    <img src="images/logo.png" alt="Logo LogisWayZ" class="logo-img" id="logoImg">
+    <div class="logo-name">Votre partenaire de confiance</div>
+  </div>
+  <div class="loader"></div>
+  <div id="message" class="message">Commandes</div>
+
+  <script>
+    // Messages et couleurs
+    const messages = [
+      { text: "Commandes", colorClass: "message-0", glow: "white" },
+      { text: "et reçois", colorClass: "message-1", glow: "white" },
+      { text: "en toute sécurité", colorClass: "message-2", glow: "white" }
+    ];
+    let idx = 0;
+    const msgDiv = document.getElementById('message');
+    const logoImg = document.getElementById('logoImg');
+
+    function showMessage(i) {
+      msgDiv.classList.remove('visible', ...messages.map(m => m.colorClass));
+      setTimeout(() => {
+        msgDiv.textContent = messages[i].text;
+        msgDiv.classList.add('visible', messages[i].colorClass);
+        // Glow effect on logo
+        logoImg.style.boxShadow = `0 0 40px 0 rgba(255,255,255,0.8), 0 8px 40px 0 #2c7a7b22`;
+        setTimeout(() => {
+          logoImg.style.boxShadow = `0 8px 40px 0 #2c7a7b22, 0 2px 8px #2b6cb022`;
+        }, 1000);
+      }, 500);
+    }
+    // Initial display
+    msgDiv.classList.add('visible', messages[0].colorClass);
+    logoImg.style.boxShadow = `0 0 40px 0 ${messages[0].glow}88, 0 8px 40px 0 #2c7a7b22`;
+    setTimeout(() => {
+      logoImg.style.boxShadow = `0 8px 40px 0 #2c7a7b22, 0 2px 8px #2b6cb022`;
+    }, 1000);
+
+    setInterval(() => {
+      idx = (idx + 1) % messages.length;
+      showMessage(idx);
+    }, 2200);
+
+    // Create network animation
+    function createNetworkAnimation() {
+      const colors = ['#2c7a7b', '#3182ce', '#805ad5', '#d53f8c', '#38a169'];
+      const animContainer = document.getElementById('networkAnim');
+      
+      // Create nodes (distribution centers)
+      for (let i = 0; i < 12; i++) {
+        const node = document.createElement('div');
+        node.className = 'network-node';
+        node.style.left = `${Math.random() * 100}vw`;
+        node.style.top = `${Math.random() * 100}vh`;
+        node.style.animationDelay = `${Math.random() * 2}s`;
+        animContainer.appendChild(node);
+      }
+
+      // Create fast-moving lines (transport routes)
+      for (let i = 0; i < 30; i++) {
+        const line = document.createElement('div');
+        line.className = 'network-line';
+        line.style.color = colors[Math.floor(Math.random() * colors.length)];
+        line.style.top = `${Math.random() * 100}vh`;
+        line.style.width = `${20 + Math.random() * 60}%`;
+        line.style.animationDuration = `${0.5 + Math.random() * 0.5}s`;
+        line.style.animationDelay = `${Math.random() * 2}s`;
+        
+        // Random direction and angle
+        if (Math.random() > 0.5) {
+          line.style.transform = `rotate(${-30 + Math.random() * 60}deg)`;
+          line.style.left = `${-5 + Math.random() * -10}%`;
+        } else {
+          line.style.top = `${Math.random() * 100}vh`;
+          line.style.left = `${-10 + Math.random() * 110}%`;
+        }
+        
+        animContainer.appendChild(line);
+      }
+    }
+    createNetworkAnimation();
+
+    // Redirection après 7 secondes
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 7000);
+  </script>
+</body>
+</html>

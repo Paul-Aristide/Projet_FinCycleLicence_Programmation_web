@@ -1,0 +1,14 @@
+{
+    "require": {
+        "tecnickcom/tcpdf": "^6.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Controllers\\": "controllers/",
+            "App\\Models\\": "models/",
+            "App\\Middleware\\": "middleware/",
+            "App\\Utils\\": "utils/",
+            "App\\Config\\": "config/"
+        }
+    }
+}
